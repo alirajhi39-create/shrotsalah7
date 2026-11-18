@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Cairo", "Tajawal", "Segoe UI", system-ui, sans-serif;
+  --font-quran: "Amiri", "Traditional Arabic", serif;
+
+  --color-turq-50: #effcfb;
+  --color-turq-100: #d4f7f4;
+  --color-turq-200: #aceeea;
+  --color-turq-300: #74dfdb;
+  --color-turq-400: #3bc8c5;
+  --color-turq-500: #1fadab;
+  --color-turq-600: #178b8b;
+  --color-turq-700: #176f70;
+  --color-turq-800: #17595a;
+  --color-turq-900: #174a4b;
+
+  --color-brand-blue: #1e6fd9;
+  --color-brand-orange: #f7931e;
+  --color-brand-green: #22a06b;
+
+  --animate-float: float 4s ease-in-out infinite;
+  --animate-pop: pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  --animate-wiggle: wiggle 0.5s ease-in-out;
+  --animate-fall: fall 2.8s linear forwards;
+  --animate-fadeup: fadeup 0.45s ease-out both;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pop {
+  0% { opacity: 0; transform: scale(0.6); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+
+@keyframes fall {
+  0% { opacity: 1; transform: translateY(-10vh) rotate(0deg); }
+  100% { opacity: 0; transform: translateY(110vh) rotate(720deg); }
+}
+
+@keyframes fadeup {
+  0% { opacity: 0; transform: translateY(14px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: #f8fbfb;
+  color: #1d293d;
+}
+
+.font-quran {
+  font-family: var(--font-quran);
+}
+
+.pattern-bg {
+  background-color: #f4fbfb;
+  background-image:
+    radial-gradient(circle at 25% 25%, #178b8b14 2px, transparent 2.5px),
+    radial-gradient(circle at 75% 75%, #178b8b14 2px, transparent 2.5px);
+  background-size: 36px 36px;
+}
+
+.touch-target {
+  min-width: 56px;
+  min-height: 56px;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: white !important;
+  }
+  .print-only-card {
+    box-shadow: none !important;
+    border: 4px solid #178b8b !important;
+  }
+}
