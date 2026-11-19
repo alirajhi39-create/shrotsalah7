@@ -47,6 +47,23 @@ export function App() {
   const [showTeacher, setShowTeacher] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [confetti, setConfetti] = useState(false);
+  const [smartboardMode, setSmartboardMode] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem('shrotsalsh2_smartboard_mode') === '1';
+    } catch {
+      return false;
+    }
+  });
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('smartboard-mode', smartboardMode);
+    localStorage.setItem('shrotsalsh2_smartboard_mode', smartboardMode ? '1' : '0');
+  }, [smartboardMode]);
+
+  const toggleSmartboard = () => {
+    setSmartboardMode((v) => !v);
+    playSfx('click');
+  };
 
   const playSfx = (type: 'success' | 'error' | 'click' | 'win') => {
     playTone(type, soundEnabled);
@@ -141,6 +158,18 @@ export function App() {
     setInLesson(false);
   };
 
+  const handleUpdateRecord = (id: string, name: string, section: ClassSection) => {
+    const now = new Date().toISOString();
+    setTeacherRecords((prev) => {
+      const next = prev.map((r) => (r.id === id ? { ...r, name, section, updatedAt: now } : r));
+      localStorage.setItem(RECORDS_KEY, JSON.stringify(next));
+      return next;
+    });
+    setActiveStudent((prev) =>
+      prev && prev.id === id ? { ...prev, name, section, updatedAt: now } : prev
+    );
+  };
+
   const renderStationContent = () => {
     if (!activeStudent) return null;
     const sid = activeStudent.currentStation;
@@ -192,6 +221,8 @@ export function App() {
         <div className={showTeacher ? 'no-print' : ''}>
           <LandingPage
             existingStudent={activeStudent}
+            smartboardMode={smartboardMode}
+            onToggleSmartboard={toggleSmartboard}
             onStart={handleStartNew}
             onResume={handleResume}
             onOpenTeacher={() => setShowTeacher(true)}
@@ -202,6 +233,7 @@ export function App() {
             records={teacherRecords}
             onClose={() => setShowTeacher(false)}
             onClearRecords={handleClearRecords}
+            onUpdateRecord={handleUpdateRecord}
           />
         )}
       </>
@@ -235,10 +267,22 @@ export function App() {
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <span className="rounded-xl bg-amber-100 px-3 py-1.5 text-sm font-black text-amber-800">
                 {activeStudent.totalStars} ⭐
               </span>
+              <button
+                type="button"
+                onClick={toggleSmartboard}
+                className={`rounded-xl px-3 py-1.5 text-xs font-black transition ${
+                  smartboardMode
+                    ? 'bg-brand-orange text-white shadow'
+                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                }`}
+                title="تكبير الخط والوضوح على السبورة الذكية"
+              >
+                🖥️ {smartboardMode ? 'وضع السبورة ✓' : 'وضع السبورة'}
+              </button>
               <button
                 type="button"
                 onClick={() => setSoundEnabled((v) => !v)}
@@ -302,7 +346,7 @@ export function App() {
       </header>
 
       {/* Main Station Workspace */}
-        <main className="mx-auto max-w-4xl px-4 pt-6">
+        <main className={`mx-auto px-4 pt-6 ${smartboardMode ? 'max-w-6xl' : 'max-w-5xl'}`}>
           <div className="no-print mb-6 flex flex-wrap items-center justify-between gap-3 rounded-3xl bg-white p-5 shadow-md shadow-turq-900/5">
             <div className="flex items-center gap-4">
               <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-turq-100 text-3xl">
@@ -346,6 +390,7 @@ export function App() {
           records={teacherRecords}
           onClose={() => setShowTeacher(false)}
           onClearRecords={handleClearRecords}
+          onUpdateRecord={handleUpdateRecord}
         />
       )}
     </>

@@ -4,6 +4,8 @@ import { ClassSection, StudentRecord } from '../types';
 
 interface LandingPageProps {
   existingStudent: StudentRecord | null;
+  smartboardMode: boolean;
+  onToggleSmartboard: () => void;
   onStart: (name: string, section: ClassSection) => void;
   onResume: () => void;
   onOpenTeacher: () => void;
@@ -11,6 +13,8 @@ interface LandingPageProps {
 
 export const LandingPage: React.FC<LandingPageProps> = ({
   existingStudent,
+  smartboardMode,
+  onToggleSmartboard,
   onStart,
   onResume,
   onOpenTeacher,
@@ -43,13 +47,27 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             <p className="font-black text-turq-900">الدراسات الإسلامية – الفقه</p>
           </div>
         </div>
-        <button
-          type="button"
-          onClick={onOpenTeacher}
-          className="rounded-2xl bg-white px-4 py-2 text-sm font-bold text-turq-700 shadow transition hover:bg-turq-50"
-        >
-          👨‍🏫 دخول المعلم
-        </button>
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={onToggleSmartboard}
+            className={`rounded-2xl px-4 py-2 text-sm font-black shadow transition ${
+              smartboardMode
+                ? 'bg-brand-orange text-white'
+                : 'bg-white text-slate-700 hover:bg-turq-50'
+            }`}
+            title="تكبير الخط والوضوح للعرض على السبورة الذكية"
+          >
+            🖥️ {smartboardMode ? 'وضع السبورة: مُفعّل' : 'وضع السبورة'}
+          </button>
+          <button
+            type="button"
+            onClick={onOpenTeacher}
+            className="rounded-2xl bg-white px-4 py-2 text-sm font-bold text-turq-700 shadow transition hover:bg-turq-50"
+          >
+            👨‍🏫 دخول المعلم
+          </button>
+        </div>
       </header>
 
       {/* Hero section matching reference 2-column layout */}

@@ -52,10 +52,32 @@
   100% { opacity: 1; transform: translateY(0); }
 }
 
+html {
+  font-size: 16px;
+}
+
+@media (min-width: 1024px) {
+  html {
+    font-size: 17px;
+  }
+}
+
+html.smartboard-mode {
+  font-size: 19px;
+}
+
+@media (min-width: 1280px) {
+  html.smartboard-mode {
+    font-size: 21px;
+  }
+}
+
 body {
   font-family: var(--font-sans);
   background-color: #f8fbfb;
-  color: #1d293d;
+  color: #0f172b;
+  letter-spacing: 0;
+  text-rendering: optimizeLegibility;
 }
 
 .font-quran {
@@ -71,8 +93,24 @@ body {
 }
 
 .touch-target {
-  min-width: 56px;
-  min-height: 56px;
+  min-width: 60px;
+  min-height: 60px;
+}
+
+.smartboard-mode .touch-target {
+  min-height: 68px;
+}
+
+.smartboard-mode main p,
+.smartboard-mode main button,
+.smartboard-mode main span,
+.smartboard-mode main td,
+.smartboard-mode main th {
+  font-weight: 700;
+}
+
+.smartboard-mode .rounded-3xl {
+  border-width: 2px;
 }
 
 @media print {
